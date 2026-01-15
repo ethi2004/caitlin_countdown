@@ -44,11 +44,39 @@ st.markdown(
         font-size: 32px;
         animation: float 18s linear infinite;
         opacity: 0.6;
+
+        /* NEW: make clickable */
+        pointer-events: auto;
+        cursor: pointer;
+        user-select: none;
+        filter: drop-shadow(0 6px 10px rgba(255, 105, 180, 0.22));
+        transition: transform 120ms ease;
+    }
+
+    .flower:active {
+        transform: scale(0.92);
     }
 
     @keyframes float {
         0% { transform: translateY(110vh) rotate(0deg); }
         100% { transform: translateY(-10vh) rotate(360deg); }
+    }
+
+    /* NEW: Burst particles */
+    .burst {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        pointer-events: none;
+        z-index: 9999;
+        animation: burst-move 520ms ease-out forwards;
+        opacity: 0.95;
+    }
+
+    @keyframes burst-move {
+        0%   { transform: translate(0,0) scale(1); opacity: 0.95; }
+        100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
     }
 
     /* Timer box */
@@ -75,7 +103,7 @@ st.markdown(
     }
     </style>
 
-    <div class="flowers">
+    <div class="flowers" id="flowers-layer">
         <div class="flower" style="left:10%; animation-delay:0s;">🌸</div>
         <div class="flower" style="left:25%; animation-delay:4s;">🌷</div>
         <div class="flower" style="left:40%; animation-delay:8s;">🌺</div>
@@ -83,6 +111,54 @@ st.markdown(
         <div class="flower" style="left:70%; animation-delay:6s;">🌸</div>
         <div class="flower" style="left:85%; animation-delay:10s;">🌷</div>
     </div>
+
+    <!-- NEW: Click-to-pop + pink burst -->
+    <script>
+    (function () {
+        if (window.__flowerPopInstalled) return;
+        window.__flowerPopInstalled = true;
+
+        const colors = ["#ff4fa3", "#ff77c8", "#ff9ad9", "#ffb6e6", "#ff2d8f"];
+
+        function spawnBurst(x, y) {
+            const n = 18;
+            for (let i = 0; i < n; i++) {
+                const p = document.createElement("div");
+                p.className = "burst";
+                p.style.left = (x - 5) + "px";
+                p.style.top  = (y - 5) + "px";
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                const angle = (Math.PI * 2) * (i / n);
+                const radius = 60 + Math.random() * 60;
+                const dx = Math.cos(angle) * radius;
+                const dy = Math.sin(angle) * radius;
+
+                p.style.setProperty("--dx", dx + "px");
+                p.style.setProperty("--dy", dy + "px");
+
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 600);
+            }
+        }
+
+        document.addEventListener("click", (e) => {
+            const el = e.target;
+            if (!el || !el.classList || !el.classList.contains("flower")) return;
+
+            const rect = el.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            spawnBurst(x, y);
+
+            el.style.transition = "transform 160ms ease, opacity 160ms ease";
+            el.style.transform = "scale(0.1)";
+            el.style.opacity = "0";
+            setTimeout(() => el.remove(), 170);
+        }, true);
+    })();
+    </script>
     """,
     unsafe_allow_html=True
 )
