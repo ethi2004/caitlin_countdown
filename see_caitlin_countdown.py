@@ -23,7 +23,7 @@ TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
 # --------------------------------------------------
-# Global background (so login screen matches too)
+# Global Background (applies to login + countdown)
 # --------------------------------------------------
 st.markdown(
     textwrap.dedent("""
@@ -70,12 +70,11 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS + Continuous Floating Emojis (NO GAPS)
+# CSS + Floating Emojis (random-feel, no lines)
 # --------------------------------------------------
 st.markdown(
     textwrap.dedent("""
     <style>
-    /* Floating emojis layer */
     .flowers {
         position: fixed;
         inset: 0;
@@ -85,9 +84,12 @@ st.markdown(
 
     .flower {
         position: absolute;
+        top: 0;
         font-size: 32px;
-        animation: float 18s linear infinite;
         opacity: 0.6;
+        animation-name: float;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
     }
 
     @keyframes float {
@@ -95,7 +97,6 @@ st.markdown(
         100% { transform: translateY(-10vh) rotate(360deg); }
     }
 
-    /* Timer box */
     .timer-box {
         background: rgba(255, 255, 255, 0.75);
         backdrop-filter: blur(10px);
@@ -121,35 +122,30 @@ st.markdown(
     </style>
 
     <div class="flowers">
-    <!-- Column 1 -->
-    <div class="flower" style="left:5%;  animation-delay:0s;">🌸</div>
-    <div class="flower" style="left:5%;  animation-delay:6s;">🎀</div>
-    <div class="flower" style="left:5%;  animation-delay:12s;">🌷</div>
+        <!-- Random-feel releases -->
+        <div class="flower" style="left:6%;  top:12%; animation-delay:1s;  animation-duration:17s;">🌸</div>
+        <div class="flower" style="left:9%;  top:68%; animation-delay:8s;  animation-duration:23s;">🎀</div>
+        <div class="flower" style="left:4%;  top:85%; animation-delay:14s; animation-duration:19s;">🌷</div>
 
-    <!-- Column 2 -->
-    <div class="flower" style="left:20%; animation-delay:0s;">🧸</div>
-    <div class="flower" style="left:20%; animation-delay:6s;">🌺</div>
-    <div class="flower" style="left:20%; animation-delay:12s;">💐</div>
+        <div class="flower" style="left:18%; top:24%; animation-delay:3s;  animation-duration:21s;">🧸</div>
+        <div class="flower" style="left:23%; top:72%; animation-delay:10s; animation-duration:16s;">🌺</div>
+        <div class="flower" style="left:15%; top:92%; animation-delay:16s; animation-duration:25s;">💐</div>
 
-    <!-- Column 3 -->
-    <div class="flower" style="left:35%; animation-delay:0s;">🎀</div>
-    <div class="flower" style="left:35%; animation-delay:6s;">🌸</div>
-    <div class="flower" style="left:35%; animation-delay:12s;">🌷</div>
+        <div class="flower" style="left:33%; top:6%;  animation-delay:6s;  animation-duration:20s;">🎀</div>
+        <div class="flower" style="left:37%; top:55%; animation-delay:12s; animation-duration:24s;">🌸</div>
+        <div class="flower" style="left:30%; top:88%; animation-delay:2s;  animation-duration:18s;">🌷</div>
 
-    <!-- Column 4 -->
-    <div class="flower" style="left:50%; animation-delay:0s;">🌺</div>
-    <div class="flower" style="left:50%; animation-delay:6s;">🧸</div>
-    <div class="flower" style="left:50%; animation-delay:12s;">💐</div>
+        <div class="flower" style="left:48%; top:18%; animation-delay:9s;  animation-duration:22s;">🌺</div>
+        <div class="flower" style="left:52%; top:64%; animation-delay:4s;  animation-duration:17s;">🧸</div>
+        <div class="flower" style="left:45%; top:94%; animation-delay:15s; animation-duration:26s;">💐</div>
 
-    <!-- Column 5 -->
-    <div class="flower" style="left:65%; animation-delay:0s;">🌸</div>
-    <div class="flower" style="left:65%; animation-delay:6s;">🎀</div>
-    <div class="flower" style="left:65%; animation-delay:12s;">🌷</div>
+        <div class="flower" style="left:63%; top:14%; animation-delay:11s; animation-duration:19s;">🌸</div>
+        <div class="flower" style="left:67%; top:59%; animation-delay:5s;  animation-duration:23s;">🎀</div>
+        <div class="flower" style="left:60%; top:90%; animation-delay:17s; animation-duration:18s;">🌷</div>
 
-    <!-- Column 6 -->
-    <div class="flower" style="left:80%; animation-delay:0s;">🧸</div>
-    <div class="flower" style="left:80%; animation-delay:6s;">🌺</div>
-    <div class="flower" style="left:80%; animation-delay:12s;">💐</div>
+        <div class="flower" style="left:78%; top:26%; animation-delay:2s;  animation-duration:24s;">🧸</div>
+        <div class="flower" style="left:83%; top:70%; animation-delay:9s;  animation-duration:16s;">🌺</div>
+        <div class="flower" style="left:75%; top:96%; animation-delay:13s; animation-duration:21s;">💐</div>
     </div>
     """),
     unsafe_allow_html=True
