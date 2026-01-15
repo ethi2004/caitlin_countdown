@@ -127,30 +127,30 @@ st.markdown(
 )
 
 # --------------------------------------------------
-# FLOWERS HTML (MEDIUM density)
+# FLOWERS HTML (tuned for ~7–9 visible at once)
+# - Fewer total emojis (12)
+# - Slightly longer durations (28–36s)
+# - Delays spaced so it stays continuous but not crowded
 # --------------------------------------------------
 st.markdown(
     """
 <div class="flowers">
-  <div class="flower" style="left:6%;  animation-delay:0s;  animation-duration:24s;">🌸</div>
-  <div class="flower" style="left:14%; animation-delay:4s;  animation-duration:28s;">🎀</div>
-  <div class="flower" style="left:22%; animation-delay:9s;  animation-duration:26s;">🌷</div>
-  <div class="flower" style="left:30%; animation-delay:2s;  animation-duration:30s;">🧸</div>
+  <div class="flower" style="left:7%;  animation-delay:0s;  animation-duration:32s;">🌸</div>
+  <div class="flower" style="left:16%; animation-delay:4s;  animation-duration:34s;">🎀</div>
+  <div class="flower" style="left:25%; animation-delay:9s;  animation-duration:30s;">🌷</div>
+  <div class="flower" style="left:34%; animation-delay:2s;  animation-duration:36s;">🧸</div>
 
-  <div class="flower" style="left:38%; animation-delay:7s;  animation-duration:25s;">🌺</div>
-  <div class="flower" style="left:46%; animation-delay:13s; animation-duration:29s;">💐</div>
-  <div class="flower" style="left:54%; animation-delay:5s;  animation-duration:27s;">🎀</div>
-  <div class="flower" style="left:62%; animation-delay:16s; animation-duration:31s;">🌸</div>
+  <div class="flower" style="left:43%; animation-delay:7s;  animation-duration:31s;">🌺</div>
+  <div class="flower" style="left:52%; animation-delay:13s; animation-duration:35s;">💐</div>
+  <div class="flower" style="left:61%; animation-delay:5s;  animation-duration:33s;">🎀</div>
+  <div class="flower" style="left:70%; animation-delay:16s; animation-duration:36s;">🌸</div>
 
-  <div class="flower" style="left:70%; animation-delay:10s; animation-duration:26s;">🌷</div>
-  <div class="flower" style="left:78%; animation-delay:18s; animation-duration:32s;">🧸</div>
-  <div class="flower" style="left:86%; animation-delay:14s; animation-duration:28s;">🌺</div>
-  <div class="flower" style="left:94%; animation-delay:22s; animation-duration:34s;">💐</div>
+  <div class="flower" style="left:79%; animation-delay:11s; animation-duration:30s;">🌷</div>
+  <div class="flower" style="left:88%; animation-delay:19s; animation-duration:34s;">🧸</div>
 
-  <!-- second wave for continuity -->
-  <div class="flower" style="left:18%; animation-delay:26s; animation-duration:30s;">🎀</div>
-  <div class="flower" style="left:42%; animation-delay:30s; animation-duration:28s;">🌸</div>
-  <div class="flower" style="left:66%; animation-delay:34s; animation-duration:32s;">🌷</div>
+  <!-- small second wave for continuity (but still calm) -->
+  <div class="flower" style="left:28%; animation-delay:26s; animation-duration:33s;">🌺</div>
+  <div class="flower" style="left:66%; animation-delay:30s; animation-duration:35s;">💐</div>
 </div>
     """.strip(),
     unsafe_allow_html=True
