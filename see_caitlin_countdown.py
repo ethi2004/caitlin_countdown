@@ -9,7 +9,6 @@ Original file is located at
 
 # app.py
 import time
-import textwrap
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 import streamlit as st
@@ -23,17 +22,17 @@ TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
 # --------------------------------------------------
-# Global Background (applies to login + countdown)
+# Global Background (so login matches too)
 # --------------------------------------------------
 st.markdown(
-    textwrap.dedent("""
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, #ffd6e8, #ffeef6);
-        overflow: hidden;
-    }
-    </style>
-    """),
+    """
+<style>
+.stApp {
+    background: linear-gradient(135deg, #ffd6e8, #ffeef6);
+    overflow: hidden;
+}
+</style>
+    """.strip(),
     unsafe_allow_html=True
 )
 
@@ -45,16 +44,16 @@ if "unlocked" not in st.session_state:
 
 if not st.session_state.unlocked:
     st.markdown(
-        textwrap.dedent("""
-        <div style="text-align:center; margin-top:80px;">
-            <div style="font-size:40px; font-weight:800; color:#b03060;">
-                Only for Caitlin Fowler 💗
-            </div>
-            <div style="font-size:18px; color:#a8326d; margin-top:10px;">
-                Enter the password to view the countdown
-            </div>
-        </div>
-        """),
+        """
+<div style="text-align:center; margin-top:80px;">
+  <div style="font-size:40px; font-weight:800; color:#b03060;">
+    Only for Caitlin Fowler 💗
+  </div>
+  <div style="font-size:18px; color:#a8326d; margin-top:10px;">
+    Enter the password to view the countdown
+  </div>
+</div>
+        """.strip(),
         unsafe_allow_html=True
     )
 
@@ -70,97 +69,103 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS + Floating Emojis (random-feel, no lines)
+# CSS ONLY (separate call)
 # --------------------------------------------------
-st.markdown(
-    textwrap.dedent("""
-    <style>
-    .flowers {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-    }
+css = """
+<style>
+.flowers {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
 
-    .flower {
-        position: absolute;
-        top: 0;
-        font-size: 32px;
-        opacity: 0.6;
-        animation-name: float;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-    }
+.flower {
+    position: absolute;
+    top: 0;
+    font-size: 32px;
+    opacity: 0.6;
+    animation-name: float;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
 
-    @keyframes float {
-        0%   { transform: translateY(110vh) rotate(0deg); }
-        100% { transform: translateY(-10vh) rotate(360deg); }
-    }
+@keyframes float {
+    0%   { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-10vh) rotate(360deg); }
+}
 
-    .timer-box {
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 30px 20px;
-        box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
-        text-align: center;
-        margin-bottom: 20px;
-    }
+/* Timer box */
+.timer-box {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    .timer-text {
-        font-size: 52px;
-        font-weight: 800;
-        letter-spacing: 1px;
-        color: #b03060;
-    }
+.timer-text {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #b03060;
+}
 
-    .subtitle {
-        font-size: 20px;
-        color: #a8326d;
-        margin-bottom: 10px;
-    }
-    </style>
+.subtitle {
+    font-size: 20px;
+    color: #a8326d;
+    margin-bottom: 10px;
+}
+</style>
+""".strip()
 
-    <div class="flowers">
-        <!-- Random-feel releases -->
-        <div class="flower" style="left:6%;  top:12%; animation-delay:1s;  animation-duration:17s;">🌸</div>
-        <div class="flower" style="left:9%;  top:68%; animation-delay:8s;  animation-duration:23s;">🎀</div>
-        <div class="flower" style="left:4%;  top:85%; animation-delay:14s; animation-duration:19s;">🌷</div>
+st.markdown(css, unsafe_allow_html=True)
 
-        <div class="flower" style="left:18%; top:24%; animation-delay:3s;  animation-duration:21s;">🧸</div>
-        <div class="flower" style="left:23%; top:72%; animation-delay:10s; animation-duration:16s;">🌺</div>
-        <div class="flower" style="left:15%; top:92%; animation-delay:16s; animation-duration:25s;">💐</div>
+# --------------------------------------------------
+# FLOWERS HTML ONLY (separate call, no indentation)
+# --------------------------------------------------
+flowers_html = """
+<div class="flowers">
+  <div class="flower" style="left:6%;  top:12%; animation-delay:1s;  animation-duration:17s;">🌸</div>
+  <div class="flower" style="left:9%;  top:68%; animation-delay:8s;  animation-duration:23s;">🎀</div>
+  <div class="flower" style="left:4%;  top:85%; animation-delay:14s; animation-duration:19s;">🌷</div>
 
-        <div class="flower" style="left:33%; top:6%;  animation-delay:6s;  animation-duration:20s;">🎀</div>
-        <div class="flower" style="left:37%; top:55%; animation-delay:12s; animation-duration:24s;">🌸</div>
-        <div class="flower" style="left:30%; top:88%; animation-delay:2s;  animation-duration:18s;">🌷</div>
+  <div class="flower" style="left:18%; top:24%; animation-delay:3s;  animation-duration:21s;">🧸</div>
+  <div class="flower" style="left:23%; top:72%; animation-delay:10s; animation-duration:16s;">🌺</div>
+  <div class="flower" style="left:15%; top:92%; animation-delay:16s; animation-duration:25s;">💐</div>
 
-        <div class="flower" style="left:48%; top:18%; animation-delay:9s;  animation-duration:22s;">🌺</div>
-        <div class="flower" style="left:52%; top:64%; animation-delay:4s;  animation-duration:17s;">🧸</div>
-        <div class="flower" style="left:45%; top:94%; animation-delay:15s; animation-duration:26s;">💐</div>
+  <div class="flower" style="left:33%; top:6%;  animation-delay:6s;  animation-duration:20s;">🎀</div>
+  <div class="flower" style="left:37%; top:55%; animation-delay:12s; animation-duration:24s;">🌸</div>
+  <div class="flower" style="left:30%; top:88%; animation-delay:2s;  animation-duration:18s;">🌷</div>
 
-        <div class="flower" style="left:63%; top:14%; animation-delay:11s; animation-duration:19s;">🌸</div>
-        <div class="flower" style="left:67%; top:59%; animation-delay:5s;  animation-duration:23s;">🎀</div>
-        <div class="flower" style="left:60%; top:90%; animation-delay:17s; animation-duration:18s;">🌷</div>
+  <div class="flower" style="left:48%; top:18%; animation-delay:9s;  animation-duration:22s;">🌺</div>
+  <div class="flower" style="left:52%; top:64%; animation-delay:4s;  animation-duration:17s;">🧸</div>
+  <div class="flower" style="left:45%; top:94%; animation-delay:15s; animation-duration:26s;">💐</div>
 
-        <div class="flower" style="left:78%; top:26%; animation-delay:2s;  animation-duration:24s;">🧸</div>
-        <div class="flower" style="left:83%; top:70%; animation-delay:9s;  animation-duration:16s;">🌺</div>
-        <div class="flower" style="left:75%; top:96%; animation-delay:13s; animation-duration:21s;">💐</div>
-    </div>
-    """),
-    unsafe_allow_html=True
-)
+  <div class="flower" style="left:63%; top:14%; animation-delay:11s; animation-duration:19s;">🌸</div>
+  <div class="flower" style="left:67%; top:59%; animation-delay:5s;  animation-duration:23s;">🎀</div>
+  <div class="flower" style="left:60%; top:90%; animation-delay:17s; animation-duration:18s;">🌷</div>
+
+  <div class="flower" style="left:78%; top:26%; animation-delay:2s;  animation-duration:24s;">🧸</div>
+  <div class="flower" style="left:83%; top:70%; animation-delay:9s;  animation-duration:16s;">🌺</div>
+  <div class="flower" style="left:75%; top:96%; animation-delay:13s; animation-duration:21s;">💐</div>
+</div>
+""".strip()
+
+st.markdown(flowers_html, unsafe_allow_html=True)
 
 # --------------------------------------------------
 # Title
 # --------------------------------------------------
 st.markdown(
-    textwrap.dedent("""
-    <div class="timer-box">
-        <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
-        <div class="subtitle">July 5, 2026 — 3:00 PM</div>
-    </div>
-    """),
+    """
+<div class="timer-box">
+  <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
+  <div class="subtitle">July 5, 2026 — 3:00 PM</div>
+</div>
+    """.strip(),
     unsafe_allow_html=True
 )
 
@@ -179,12 +184,12 @@ while True:
 
     if total_seconds <= 0:
         placeholder.markdown(
-            textwrap.dedent("""
-            <div class="timer-box">
-                <div class="timer-text">🌸 IT’S TIME 🌸</div>
-                <div class="subtitle">I’m finally with you 💗</div>
-            </div>
-            """),
+            """
+<div class="timer-box">
+  <div class="timer-text">🌸 IT’S TIME 🌸</div>
+  <div class="subtitle">I’m finally with you 💗</div>
+</div>
+            """.strip(),
             unsafe_allow_html=True
         )
         st.balloons()
@@ -202,11 +207,11 @@ while True:
     text = f"{days:02d}d  {hours:02d}h  {minutes:02d}m  {seconds:02d}s  {ms:03d}ms"
 
     placeholder.markdown(
-        textwrap.dedent(f"""
-        <div class="timer-box">
-            <div class="timer-text">{text}</div>
-        </div>
-        """),
+        f"""
+<div class="timer-box">
+  <div class="timer-text">{text}</div>
+</div>
+        """.strip(),
         unsafe_allow_html=True
     )
 
