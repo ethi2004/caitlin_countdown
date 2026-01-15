@@ -7,142 +7,146 @@ Original file is located at
     https://colab.research.google.com/drive/1sILDAtI6Zo0bpAAXoTb4j0tGVABEubGL
 """
 
-# @title
+# app.py
 import time
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 import streamlit as st
 
-# ---------- Config ----------
+# --------------------------------------------------
+# Page Config
+# --------------------------------------------------
 st.set_page_config(page_title="Countdown", page_icon="🌸", layout="centered")
 
 TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
-# ---------- Password Gate ----------
+# --------------------------------------------------
+# Password Gate
+# --------------------------------------------------
 if "unlocked" not in st.session_state:
     st.session_state.unlocked = False
 
 if not st.session_state.unlocked:
     st.markdown(
         """
-        <div style="text-align:center; margin-top: 60px;">
-            <div style="font-size:40px; font-weight:800; color:#b03060;">Only for Caitlin Fowler 💗</div>
-            <div style="font-size:18px; color:#a8326d; margin-top:10px;">Enter the password to view the countdown</div>
+        <div style="text-align:center; margin-top:80px;">
+            <div style="font-size:40px; font-weight:800; color:#b03060;">
+                Only for Caitlin Fowler 💗
+            </div>
+            <div style="font-size:18px; color:#a8326d; margin-top:10px;">
+                Enter the password to view the countdown
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    pw = st.text_input("Password", type="password", placeholder="Type it here...")
-    col1, col2 = st.columns([1,1])
-    with col1:
-        if st.button("Unlock 💗", use_container_width=True):
-            if pw == "ILY":
-                st.session_state.unlocked = True
-                st.rerun()
-            else:
-                st.error("Nope 😭 try again")
-
-    with col2:
-        if st.button("Clear", use_container_width=True):
+    pw = st.text_input("Password", type="password", placeholder="Type it here…")
+    if st.button("Unlock 💗"):
+        if pw == "ILY":
+            st.session_state.unlocked = True
             st.rerun()
+        else:
+            st.error("Wrong password 😭")
 
     st.stop()
 
-# ---------- CSS ----------
+# --------------------------------------------------
+# CSS + Floating Emojis (NO INDENTATION ON HTML)
+# --------------------------------------------------
 st.markdown(
     """
-    <style>
-    /* Background */
-    .stApp {
-        background: linear-gradient(135deg, #ffd6e8, #ffeef6);
-        overflow: hidden;
-    }
+<style>
+/* Background */
+.stApp {
+    background: linear-gradient(135deg, #ffd6e8, #ffeef6);
+    overflow: hidden;
+}
 
-    /* Floating flowers */
-    .flowers {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 0;
-    }
+/* Floating emojis */
+.flowers {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
 
-    .flower {
-        position: absolute;
-        font-size: 32px;
-        animation: float 18s linear infinite;
-        opacity: 0.6;
-    }
+.flower {
+    position: absolute;
+    font-size: 32px;
+    animation: float 18s linear infinite;
+    opacity: 0.6;
+}
 
-    @keyframes float {
-        0% { transform: translateY(110vh) rotate(0deg); }
-        100% { transform: translateY(-10vh) rotate(360deg); }
-    }
+@keyframes float {
+    0%   { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-10vh) rotate(360deg); }
+}
 
-    /* Timer box */
-    .timer-box {
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 30px 20px;
-        box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
-        text-align: center;
-    }
+/* Timer box */
+.timer-box {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    .timer-text {
-        font-size: 52px;
-        font-weight: 800;
-        letter-spacing: 1px;
-        color: #b03060;
-    }
+.timer-text {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #b03060;
+}
 
-    .subtitle {
-        font-size: 20px;
-        color: #a8326d;
-        margin-bottom: 10px;
-    }
-    </style>
+.subtitle {
+    font-size: 20px;
+    color: #a8326d;
+    margin-bottom: 10px;
+}
+</style>
 
-    <div class="flowers">
-        <!-- Column 1 -->
-        <div class="flower" style="left:5%;  animation-delay:0s;">🌸</div>
-        <div class="flower" style="left:5%;  animation-delay:6s;">🎀</div>
-        <div class="flower" style="left:5%;  animation-delay:12s;">🌷</div>
+<div class="flowers">
+    <!-- Column 1 -->
+    <div class="flower" style="left:5%;  animation-delay:0s;">🌸</div>
+    <div class="flower" style="left:5%;  animation-delay:6s;">🎀</div>
+    <div class="flower" style="left:5%;  animation-delay:12s;">🌷</div>
 
-        <!-- Column 2 -->
-        <div class="flower" style="left:20%; animation-delay:0s;">🧸</div>
-        <div class="flower" style="left:20%; animation-delay:6s;">🌺</div>
-        <div class="flower" style="left:20%; animation-delay:12s;">💐</div>
+    <!-- Column 2 -->
+    <div class="flower" style="left:20%; animation-delay:0s;">🧸</div>
+    <div class="flower" style="left:20%; animation-delay:6s;">🌺</div>
+    <div class="flower" style="left:20%; animation-delay:12s;">💐</div>
 
-        <!-- Column 3 -->
-        <div class="flower" style="left:35%; animation-delay:0s;">🎀</div>
-        <div class="flower" style="left:35%; animation-delay:6s;">🌸</div>
-        <div class="flower" style="left:35%; animation-delay:12s;">🌷</div>
+    <!-- Column 3 -->
+    <div class="flower" style="left:35%; animation-delay:0s;">🎀</div>
+    <div class="flower" style="left:35%; animation-delay:6s;">🌸</div>
+    <div class="flower" style="left:35%; animation-delay:12s;">🌷</div>
 
-        <!-- Column 4 -->
-        <div class="flower" style="left:50%; animation-delay:0s;">🌺</div>
-        <div class="flower" style="left:50%; animation-delay:6s;">🧸</div>
-        <div class="flower" style="left:50%; animation-delay:12s;">💐</div>
+    <!-- Column 4 -->
+    <div class="flower" style="left:50%; animation-delay:0s;">🌺</div>
+    <div class="flower" style="left:50%; animation-delay:6s;">🧸</div>
+    <div class="flower" style="left:50%; animation-delay:12s;">💐</div>
 
-        <!-- Column 5 -->
-        <div class="flower" style="left:65%; animation-delay:0s;">🌸</div>
-        <div class="flower" style="left:65%; animation-delay:6s;">🎀</div>
-        <div class="flower" style="left:65%; animation-delay:12s;">🌷</div>
+    <!-- Column 5 -->
+    <div class="flower" style="left:65%; animation-delay:0s;">🌸</div>
+    <div class="flower" style="left:65%; animation-delay:6s;">🎀</div>
+    <div class="flower" style="left:65%; animation-delay:12s;">🌷</div>
 
-        <!-- Column 6 -->
-        <div class="flower" style="left:80%; animation-delay:0s;">🧸</div>
-        <div class="flower" style="left:80%; animation-delay:6s;">🌺</div>
-        <div class="flower" style="left:80%; animation-delay:12s;">💐</div>
-    </div>
+    <!-- Column 6 -->
+    <div class="flower" style="left:80%; animation-delay:0s;">🧸</div>
+    <div class="flower" style="left:80%; animation-delay:6s;">🌺</div>
+    <div class="flower" style="left:80%; animation-delay:12s;">💐</div>
+</div>
     """,
     unsafe_allow_html=True
 )
 
-# ---------- Title ----------
+# --------------------------------------------------
+# Title
+# --------------------------------------------------
 st.markdown(
     """
     <div class="timer-box">
@@ -155,10 +159,12 @@ st.markdown(
 
 placeholder = st.empty()
 
+# --------------------------------------------------
+# Countdown Loop
+# --------------------------------------------------
 fps = 30
 sleep_s = 1 / fps
 
-# ---------- Loop ----------
 while True:
     now = datetime.now(timezone.utc)
     delta = TARGET.astimezone(timezone.utc) - now
