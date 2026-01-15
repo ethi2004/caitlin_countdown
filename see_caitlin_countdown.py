@@ -19,6 +19,37 @@ st.set_page_config(page_title="Countdown", page_icon="🌸", layout="centered")
 TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
+# ---------- Password Gate ----------
+if "unlocked" not in st.session_state:
+    st.session_state.unlocked = False
+
+if not st.session_state.unlocked:
+    st.markdown(
+        """
+        <div style="text-align:center; margin-top: 60px;">
+            <div style="font-size:40px; font-weight:800; color:#b03060;">Only for Caitlin Fowler 💗</div>
+            <div style="font-size:18px; color:#a8326d; margin-top:10px;">Enter the password to view the countdown</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    pw = st.text_input("Password", type="password", placeholder="Type it here...")
+    col1, col2 = st.columns([1,1])
+    with col1:
+        if st.button("Unlock 💗", use_container_width=True):
+            if pw == "ILY":
+                st.session_state.unlocked = True
+                st.rerun()
+            else:
+                st.error("Nope 😭 try again")
+
+    with col2:
+        if st.button("Clear", use_container_width=True):
+            st.rerun()
+
+    st.stop()
+
 # ---------- CSS ----------
 st.markdown(
     """
@@ -77,14 +108,35 @@ st.markdown(
     </style>
 
     <div class="flowers">
-        <div class="flower" style="left:5%; animation-delay:0s;">🌸</div>
-        <div class="flower" style="left:18%; animation-delay:3s;">🎀</div>
-        <div class="flower" style="left:30%; animation-delay:6s;">🌷</div>
-        <div class="flower" style="left:42%; animation-delay:9s;">🧸</div>
-        <div class="flower" style="left:55%; animation-delay:2s;">🌺</div>
-        <div class="flower" style="left:68%; animation-delay:5s;">💐</div>
-        <div class="flower" style="left:80%; animation-delay:8s;">🌸</div>
-        <div class="flower" style="left:92%; animation-delay:11s;">🎀</div>
+        <!-- Column 1 -->
+        <div class="flower" style="left:5%;  animation-delay:0s;">🌸</div>
+        <div class="flower" style="left:5%;  animation-delay:6s;">🎀</div>
+        <div class="flower" style="left:5%;  animation-delay:12s;">🌷</div>
+
+        <!-- Column 2 -->
+        <div class="flower" style="left:20%; animation-delay:0s;">🧸</div>
+        <div class="flower" style="left:20%; animation-delay:6s;">🌺</div>
+        <div class="flower" style="left:20%; animation-delay:12s;">💐</div>
+
+        <!-- Column 3 -->
+        <div class="flower" style="left:35%; animation-delay:0s;">🎀</div>
+        <div class="flower" style="left:35%; animation-delay:6s;">🌸</div>
+        <div class="flower" style="left:35%; animation-delay:12s;">🌷</div>
+
+        <!-- Column 4 -->
+        <div class="flower" style="left:50%; animation-delay:0s;">🌺</div>
+        <div class="flower" style="left:50%; animation-delay:6s;">🧸</div>
+        <div class="flower" style="left:50%; animation-delay:12s;">💐</div>
+
+        <!-- Column 5 -->
+        <div class="flower" style="left:65%; animation-delay:0s;">🌸</div>
+        <div class="flower" style="left:65%; animation-delay:6s;">🎀</div>
+        <div class="flower" style="left:65%; animation-delay:12s;">🌷</div>
+
+        <!-- Column 6 -->
+        <div class="flower" style="left:80%; animation-delay:0s;">🧸</div>
+        <div class="flower" style="left:80%; animation-delay:6s;">🌺</div>
+        <div class="flower" style="left:80%; animation-delay:12s;">💐</div>
     </div>
     """,
     unsafe_allow_html=True
@@ -103,7 +155,6 @@ st.markdown(
 
 placeholder = st.empty()
 
-# --- Slider removed ---
 fps = 30
 sleep_s = 1 / fps
 
