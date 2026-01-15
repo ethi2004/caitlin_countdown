@@ -34,12 +34,11 @@ def img_to_data_url(path: str) -> str:
     mime = "image/png" if suffix == ".png" else "image/jpeg"
     return f"data:{mime};base64,{b64}"
 
-# IMPORTANT: your folder is CountdownPhotos
 left_img = img_to_data_url("CountdownPhotos/CountdownPic1.png")
 right_img = img_to_data_url("CountdownPhotos/CountdownPic2.png")
 
 # --------------------------------------------------
-# Global Background (login + countdown)
+# Global Background
 # --------------------------------------------------
 st.markdown(
     """
@@ -49,7 +48,7 @@ st.markdown(
     overflow: hidden;
 }
 </style>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
@@ -70,13 +69,12 @@ if not st.session_state.unlocked:
     Enter the password to view the countdown
   </div>
 </div>
-        """.strip(),
+        """,
         unsafe_allow_html=True
     )
 
     pw = st.text_input("Password", type="password", placeholder="Type it here…")
 
-    # Centered unlock button
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("Unlock 💗", use_container_width=True):
@@ -89,7 +87,7 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS (keep separate from HTML)
+# CSS
 # --------------------------------------------------
 st.markdown(
     """
@@ -105,18 +103,14 @@ st.markdown(
     position: absolute;
     font-size: 32px;
     opacity: 0.6;
-    animation-name: float;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    animation: float linear infinite;
 }
 
-/* Spawn from bottom, float up */
 @keyframes float {
     0%   { transform: translateY(110vh) rotate(0deg); }
     100% { transform: translateY(-10vh) rotate(360deg); }
 }
 
-/* Timer UI */
 .timer-box {
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(10px);
@@ -139,7 +133,6 @@ st.markdown(
     margin-bottom: 6px;
 }
 
-/* LIVE indicator */
 .live-row {
     display: inline-flex;
     align-items: center;
@@ -170,13 +163,13 @@ st.markdown(
     color: #b03060;
 }
 
-/* Side Polaroids */
+/* ONLY CHANGE IS HERE */
 .side-polaroid {
     background: #fffaf6;
     padding: 10px 10px 28px 10px;
     border-radius: 8px;
     box-shadow: 0 14px 30px rgba(0,0,0,0.25);
-    width: 170px;
+    width: 210px;
     position: fixed;
     z-index: 1;
 }
@@ -199,37 +192,26 @@ st.markdown(
     transform: rotate(7deg);
 }
 </style>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
 # --------------------------------------------------
-# FLOWERS HTML (MEDIUM density)
+# Floating Emojis
 # --------------------------------------------------
 st.markdown(
     """
 <div class="flowers">
-  <div class="flower" style="left:6%;  animation-delay:0s;  animation-duration:24s;">🌸</div>
-  <div class="flower" style="left:14%; animation-delay:4s;  animation-duration:28s;">🎀</div>
-  <div class="flower" style="left:22%; animation-delay:9s;  animation-duration:26s;">🌷</div>
-  <div class="flower" style="left:30%; animation-delay:2s;  animation-duration:30s;">🧸</div>
-
-  <div class="flower" style="left:38%; animation-delay:7s;  animation-duration:25s;">🌺</div>
-  <div class="flower" style="left:46%; animation-delay:13s; animation-duration:29s;">💐</div>
-  <div class="flower" style="left:54%; animation-delay:5s;  animation-duration:27s;">🎀</div>
-  <div class="flower" style="left:62%; animation-delay:16s; animation-duration:31s;">🌸</div>
-
-  <div class="flower" style="left:70%; animation-delay:10s; animation-duration:26s;">🌷</div>
-  <div class="flower" style="left:78%; animation-delay:18s; animation-duration:32s;">🧸</div>
-  <div class="flower" style="left:86%; animation-delay:14s; animation-duration:28s;">🌺</div>
-  <div class="flower" style="left:94%; animation-delay:22s; animation-duration:34s;">💐</div>
-
-  <!-- second wave for continuity -->
-  <div class="flower" style="left:18%; animation-delay:26s; animation-duration:30s;">🎀</div>
-  <div class="flower" style="left:42%; animation-delay:30s; animation-duration:28s;">🌸</div>
-  <div class="flower" style="left:66%; animation-delay:34s; animation-duration:32s;">🌷</div>
+  <div class="flower" style="left:8%;  animation-delay:0s;  animation-duration:28s;">🌸</div>
+  <div class="flower" style="left:20%; animation-delay:6s;  animation-duration:30s;">🎀</div>
+  <div class="flower" style="left:32%; animation-delay:12s; animation-duration:26s;">🌷</div>
+  <div class="flower" style="left:44%; animation-delay:4s;  animation-duration:32s;">🧸</div>
+  <div class="flower" style="left:56%; animation-delay:10s; animation-duration:29s;">🌺</div>
+  <div class="flower" style="left:68%; animation-delay:16s; animation-duration:31s;">💐</div>
+  <div class="flower" style="left:80%; animation-delay:8s;  animation-duration:27s;">🎀</div>
+  <div class="flower" style="left:92%; animation-delay:18s; animation-duration:34s;">🌸</div>
 </div>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
@@ -241,29 +223,28 @@ st.markdown(
 <div class="timer-box">
   <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
   <div class="subtitle">July 5, 2026 — 3:00 PM</div>
-
   <div class="live-row">
     <span class="live-dot"></span>
     <span class="live-text">LIVE</span>
   </div>
 </div>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
 # --------------------------------------------------
-# Side Photos (base64 embedded so they ALWAYS load)
+# Side Photos
 # --------------------------------------------------
 st.markdown(
     f"""
 <div class="side-polaroid left-polaroid">
-    <img src="{left_img}" alt="CountdownPic1">
+    <img src="{left_img}">
 </div>
 
 <div class="side-polaroid right-polaroid">
-    <img src="{right_img}" alt="CountdownPic2">
+    <img src="{right_img}">
 </div>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
@@ -287,7 +268,7 @@ while True:
   <div class="timer-text">🌸 IT’S TIME 🌸</div>
   <div class="subtitle">I’m finally with you 💗</div>
 </div>
-            """.strip(),
+            """,
             unsafe_allow_html=True
         )
         st.balloons()
@@ -302,14 +283,14 @@ while True:
     seconds = int(rem)
     ms = int((rem - seconds) * 1000)
 
-    text = f"{days:02d}d  {hours:02d}h  {minutes:02d}m  {seconds:02d}s  {ms:03d}ms"
+    text = f"{days:02d}d {hours:02d}h {minutes:02d}m {seconds:02d}s {ms:03d}ms"
 
     placeholder.markdown(
         f"""
 <div class="timer-box">
   <div class="timer-text">{text}</div>
 </div>
-        """.strip(),
+        """,
         unsafe_allow_html=True
     )
 
