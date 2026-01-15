@@ -22,7 +22,7 @@ TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
 # --------------------------------------------------
-# Global Background (login + countdown)
+# Global Background
 # --------------------------------------------------
 st.markdown(
     """
@@ -32,7 +32,7 @@ st.markdown(
     overflow: hidden;
 }
 </style>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
@@ -53,7 +53,7 @@ if not st.session_state.unlocked:
     Enter the password to view the countdown
   </div>
 </div>
-        """.strip(),
+        """,
         unsafe_allow_html=True
     )
 
@@ -71,11 +71,12 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS (LIVE DOT ADDED HERE)
+# CSS
 # --------------------------------------------------
 st.markdown(
     """
 <style>
+/* Floating emojis */
 .flowers {
     position: fixed;
     inset: 0;
@@ -87,14 +88,11 @@ st.markdown(
     position: absolute;
     font-size: 32px;
     opacity: 0.6;
-    animation-name: float;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    animation: float linear infinite;
 }
 
-/* Spawn from bottom, float up */
 @keyframes float {
-    0% { transform: translateY(110vh) rotate(0deg); }
+    0%   { transform: translateY(110vh) rotate(0deg); }
     100% { transform: translateY(-10vh) rotate(360deg); }
 }
 
@@ -121,7 +119,7 @@ st.markdown(
     margin-bottom: 6px;
 }
 
-/* ---------- LIVE DOT (NEW) ---------- */
+/* LIVE dot */
 .live-row {
     display: inline-flex;
     align-items: center;
@@ -135,14 +133,14 @@ st.markdown(
     height: 10px;
     border-radius: 50%;
     background: #ff4fa3;
-    box-shadow: 0 0 10px rgba(255, 79, 163, 0.55);
-    animation: pulse 1.25s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(255, 79, 163, 0.6);
+    animation: pulse 1.2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-    0% { transform: scale(0.85); opacity: 0.65; }
-    50% { transform: scale(1.25); opacity: 1; }
-    100% { transform: scale(0.85); opacity: 0.65; }
+    0% { transform: scale(0.85); opacity: 0.6; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.85); opacity: 0.6; }
 }
 
 .live-text {
@@ -151,54 +149,88 @@ st.markdown(
     letter-spacing: 1.2px;
     color: #b03060;
 }
-/* ---------------------------------- */
+
+/* Side Polaroids */
+.side-polaroid {
+    background: #fffaf6;
+    padding: 10px 10px 28px 10px;
+    border-radius: 8px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+    width: 170px;
+    position: fixed;
+    z-index: 1;
+}
+
+.side-polaroid img {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.left-polaroid {
+    left: 6%;
+    top: 45%;
+    transform: rotate(-8deg);
+}
+
+.right-polaroid {
+    right: 6%;
+    top: 45%;
+    transform: rotate(7deg);
+}
 </style>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
 # --------------------------------------------------
-# FLOWERS HTML (UNCHANGED)
+# Floating Emojis (medium density, continuous)
 # --------------------------------------------------
 st.markdown(
     """
 <div class="flowers">
-  <div class="flower" style="left:6%;  animation-delay:0s;  animation-duration:24s;">🌸</div>
-  <div class="flower" style="left:14%; animation-delay:4s;  animation-duration:28s;">🎀</div>
-  <div class="flower" style="left:22%; animation-delay:9s;  animation-duration:26s;">🌷</div>
-  <div class="flower" style="left:30%; animation-delay:2s;  animation-duration:30s;">🧸</div>
-  <div class="flower" style="left:38%; animation-delay:7s;  animation-duration:25s;">🌺</div>
-  <div class="flower" style="left:46%; animation-delay:13s; animation-duration:29s;">💐</div>
-  <div class="flower" style="left:54%; animation-delay:5s;  animation-duration:27s;">🎀</div>
-  <div class="flower" style="left:62%; animation-delay:16s; animation-duration:31s;">🌸</div>
-  <div class="flower" style="left:70%; animation-delay:10s; animation-duration:26s;">🌷</div>
-  <div class="flower" style="left:78%; animation-delay:18s; animation-duration:32s;">🧸</div>
-  <div class="flower" style="left:86%; animation-delay:14s; animation-duration:28s;">🌺</div>
-  <div class="flower" style="left:94%; animation-delay:22s; animation-duration:34s;">💐</div>
-  <div class="flower" style="left:18%; animation-delay:26s; animation-duration:30s;">🎀</div>
-  <div class="flower" style="left:42%; animation-delay:30s; animation-duration:28s;">🌸</div>
-  <div class="flower" style="left:66%; animation-delay:34s; animation-duration:32s;">🌷</div>
+  <div class="flower" style="left:8%;  animation-delay:0s;  animation-duration:28s;">🌸</div>
+  <div class="flower" style="left:20%; animation-delay:6s;  animation-duration:30s;">🎀</div>
+  <div class="flower" style="left:32%; animation-delay:12s; animation-duration:26s;">🌷</div>
+  <div class="flower" style="left:44%; animation-delay:4s;  animation-duration:32s;">🧸</div>
+  <div class="flower" style="left:56%; animation-delay:10s; animation-duration:29s;">🌺</div>
+  <div class="flower" style="left:68%; animation-delay:16s; animation-duration:31s;">💐</div>
+  <div class="flower" style="left:80%; animation-delay:8s;  animation-duration:27s;">🎀</div>
+  <div class="flower" style="left:92%; animation-delay:18s; animation-duration:34s;">🌸</div>
 </div>
-    """.strip(),
+    """,
     unsafe_allow_html=True
 )
 
 # --------------------------------------------------
-# Title (LIVE DOT ADDED HERE)
+# Title
 # --------------------------------------------------
 st.markdown(
     """
 <div class="timer-box">
   <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
   <div class="subtitle">July 5, 2026 — 3:00 PM</div>
-
-  <!-- LIVE DOT -->
   <div class="live-row">
     <span class="live-dot"></span>
     <span class="live-text">LIVE</span>
   </div>
 </div>
-    """.strip(),
+    """,
+    unsafe_allow_html=True
+)
+
+# --------------------------------------------------
+# Side Photos
+# --------------------------------------------------
+st.markdown(
+    """
+<div class="side-polaroid left-polaroid">
+    <img src="photos/CountdownPic1.png">
+</div>
+
+<div class="side-polaroid right-polaroid">
+    <img src="photos/CountdownPic2.png">
+</div>
+    """,
     unsafe_allow_html=True
 )
 
@@ -222,7 +254,7 @@ while True:
   <div class="timer-text">🌸 IT’S TIME 🌸</div>
   <div class="subtitle">I’m finally with you 💗</div>
 </div>
-            """.strip(),
+            """,
             unsafe_allow_html=True
         )
         st.balloons()
@@ -244,7 +276,7 @@ while True:
 <div class="timer-box">
   <div class="timer-text">{text}</div>
 </div>
-        """.strip(),
+        """,
         unsafe_allow_html=True
     )
 
