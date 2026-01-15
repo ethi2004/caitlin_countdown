@@ -59,7 +59,6 @@ if not st.session_state.unlocked:
 
     pw = st.text_input("Password", type="password", placeholder="Type it here…")
 
-    # Centered unlock button
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("Unlock 💗", use_container_width=True):
@@ -72,7 +71,7 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS (keep separate from HTML)
+# CSS (LIVE DOT ADDED HERE)
 # --------------------------------------------------
 st.markdown(
     """
@@ -95,7 +94,7 @@ st.markdown(
 
 /* Spawn from bottom, float up */
 @keyframes float {
-    0%   { transform: translateY(110vh) rotate(0deg); }
+    0% { transform: translateY(110vh) rotate(0deg); }
     100% { transform: translateY(-10vh) rotate(360deg); }
 }
 
@@ -119,15 +118,47 @@ st.markdown(
 .subtitle {
     font-size: 20px;
     color: #a8326d;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
+
+/* ---------- LIVE DOT (NEW) ---------- */
+.live-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff4fa3;
+    box-shadow: 0 0 10px rgba(255, 79, 163, 0.55);
+    animation: pulse 1.25s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.85); opacity: 0.65; }
+    50% { transform: scale(1.25); opacity: 1; }
+    100% { transform: scale(0.85); opacity: 0.65; }
+}
+
+.live-text {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #b03060;
+}
+/* ---------------------------------- */
 </style>
     """.strip(),
     unsafe_allow_html=True
 )
 
 # --------------------------------------------------
-# FLOWERS HTML (MEDIUM density)
+# FLOWERS HTML (UNCHANGED)
 # --------------------------------------------------
 st.markdown(
     """
@@ -136,18 +167,14 @@ st.markdown(
   <div class="flower" style="left:14%; animation-delay:4s;  animation-duration:28s;">🎀</div>
   <div class="flower" style="left:22%; animation-delay:9s;  animation-duration:26s;">🌷</div>
   <div class="flower" style="left:30%; animation-delay:2s;  animation-duration:30s;">🧸</div>
-
   <div class="flower" style="left:38%; animation-delay:7s;  animation-duration:25s;">🌺</div>
   <div class="flower" style="left:46%; animation-delay:13s; animation-duration:29s;">💐</div>
   <div class="flower" style="left:54%; animation-delay:5s;  animation-duration:27s;">🎀</div>
   <div class="flower" style="left:62%; animation-delay:16s; animation-duration:31s;">🌸</div>
-
   <div class="flower" style="left:70%; animation-delay:10s; animation-duration:26s;">🌷</div>
   <div class="flower" style="left:78%; animation-delay:18s; animation-duration:32s;">🧸</div>
   <div class="flower" style="left:86%; animation-delay:14s; animation-duration:28s;">🌺</div>
   <div class="flower" style="left:94%; animation-delay:22s; animation-duration:34s;">💐</div>
-
-  <!-- second wave for continuity -->
   <div class="flower" style="left:18%; animation-delay:26s; animation-duration:30s;">🎀</div>
   <div class="flower" style="left:42%; animation-delay:30s; animation-duration:28s;">🌸</div>
   <div class="flower" style="left:66%; animation-delay:34s; animation-duration:32s;">🌷</div>
@@ -157,13 +184,19 @@ st.markdown(
 )
 
 # --------------------------------------------------
-# Title
+# Title (LIVE DOT ADDED HERE)
 # --------------------------------------------------
 st.markdown(
     """
 <div class="timer-box">
   <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
   <div class="subtitle">July 5, 2026 — 3:00 PM</div>
+
+  <!-- LIVE DOT -->
+  <div class="live-row">
+    <span class="live-dot"></span>
+    <span class="live-text">LIVE</span>
+  </div>
 </div>
     """.strip(),
     unsafe_allow_html=True
@@ -204,7 +237,7 @@ while True:
     seconds = int(rem)
     ms = int((rem - seconds) * 1000)
 
-    text = f"{days:02d}d  {hours:02d}h  {minutes:02d}m  {seconds:02d}s  {ms:03d}ms"
+    text = f"{days:02d}d {hours:02d}h {minutes:02d}m {seconds:02d}s {ms:03d}ms"
 
     placeholder.markdown(
         f"""
