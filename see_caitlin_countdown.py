@@ -7,10 +7,10 @@ Original file is located at
     https://colab.research.google.com/drive/1sILDAtI6Zo0bpAAXoTb4j0tGVABEubGL
 """
 
-import time
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 import streamlit as st
+import streamlit.components.v1 as components
 
 # ---------- Config ----------
 st.set_page_config(page_title="Countdown", page_icon="🌸", layout="centered")
@@ -18,205 +18,227 @@ st.set_page_config(page_title="Countdown", page_icon="🌸", layout="centered")
 TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
-# ---------- CSS ----------
-st.markdown(
-    """
-    <style>
-    /* Background */
-    .stApp {
-        background: linear-gradient(135deg, #ffd6e8, #ffeef6);
-        overflow: hidden;
-    }
+# Convert to UTC milliseconds for the browser
+target_utc_ms = int(TARGET.astimezone(timezone.utc).timestamp() * 1000)
 
-    /* Floating flowers */
-    .flowers {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 0;
-    }
+html = f"""
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  html, body {{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  }}
 
-    .flower {
-        position: absolute;
-        font-size: 32px;
-        animation: float 18s linear infinite;
-        opacity: 0.6;
+  /* Background */
+  body {{
+    background: linear-gradient(135deg, #ffd6e8, #ffeef6);
+  }}
 
-        /* NEW: make clickable */
-        pointer-events: auto;
-        cursor: pointer;
-        user-select: none;
-        filter: drop-shadow(0 6px 10px rgba(255, 105, 180, 0.22));
-        transition: transform 120ms ease;
-    }
+  /* Floating flowers layer */
+  .flowers {{
+    position: fixed;
+    inset: 0;
+    pointer-events: none; /* container ignores clicks */
+    z-index: 1;
+  }}
 
-    .flower:active {
-        transform: scale(0.92);
-    }
+  .flower {{
+    position: absolute;
+    font-size: 34px;
+    opacity: 0.75;
+    pointer-events: auto; /* clickable */
+    cursor: pointer;
+    user-select: none;
+    filter: drop-shadow(0 6px 10px rgba(255, 105, 180, 0.22));
+    animation: float 18s linear infinite;
+  }}
 
-    @keyframes float {
-        0% { transform: translateY(110vh) rotate(0deg); }
-        100% { transform: translateY(-10vh) rotate(360deg); }
-    }
+  @keyframes float {{
+    0%   {{ transform: translateY(110vh) rotate(0deg); }}
+    100% {{ transform: translateY(-10vh) rotate(360deg); }}
+  }}
 
-    /* NEW: Burst particles */
-    .burst {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        pointer-events: none;
-        z-index: 9999;
-        animation: burst-move 520ms ease-out forwards;
-        opacity: 0.95;
-    }
+  /* Center content */
+  .wrap {{
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    padding: 16px;
+  }}
 
-    @keyframes burst-move {
-        0%   { transform: translate(0,0) scale(1); opacity: 0.95; }
-        100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
-    }
+  /* Timer box */
+  .timer-box {{
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 30px 22px;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
+    text-align: center;
+    max-width: 900px;
+    width: min(920px, 92vw);
+  }}
 
-    /* Timer box */
-    .timer-box {
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 30px 20px;
-        box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
-        text-align: center;
-    }
+  .subtitle {{
+    font-size: 20px;
+    color: #a8326d;
+    margin-bottom: 10px;
+  }}
 
-    .timer-text {
-        font-size: 52px;
-        font-weight: 800;
-        letter-spacing: 1px;
-        color: #b03060;
-    }
+  .timer-text {{
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #b03060;
+    line-height: 1.15;
+  }}
 
-    .subtitle {
-        font-size: 20px;
-        color: #a8326d;
-        margin-bottom: 10px;
-    }
-    </style>
+  @media (max-width: 520px) {{
+    .timer-text {{ font-size: 40px; }}
+    .subtitle {{ font-size: 18px; }}
+  }}
 
-    <div class="flowers" id="flowers-layer">
-        <div class="flower" style="left:10%; animation-delay:0s;">🌸</div>
-        <div class="flower" style="left:25%; animation-delay:4s;">🌷</div>
-        <div class="flower" style="left:40%; animation-delay:8s;">🌺</div>
-        <div class="flower" style="left:55%; animation-delay:2s;">💐</div>
-        <div class="flower" style="left:70%; animation-delay:6s;">🌸</div>
-        <div class="flower" style="left:85%; animation-delay:10s;">🌷</div>
-    </div>
+  /* Burst particles */
+  .burst {{
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: burst-move 520ms ease-out forwards;
+    opacity: 0.95;
+  }}
 
-    <!-- NEW: Click-to-pop + pink burst -->
-    <script>
-    (function () {
-        if (window.__flowerPopInstalled) return;
-        window.__flowerPopInstalled = true;
+  @keyframes burst-move {{
+    0%   {{ transform: translate(0,0) scale(1); opacity: 0.95; }}
+    100% {{ transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }}
+  }}
+</style>
+</head>
+<body>
 
-        const colors = ["#ff4fa3", "#ff77c8", "#ff9ad9", "#ffb6e6", "#ff2d8f"];
+<div class="flowers" id="flowers"></div>
 
-        function spawnBurst(x, y) {
-            const n = 18;
-            for (let i = 0; i < n; i++) {
-                const p = document.createElement("div");
-                p.className = "burst";
-                p.style.left = (x - 5) + "px";
-                p.style.top  = (y - 5) + "px";
-                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+<div class="wrap">
+  <div class="timer-box">
+    <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
+    <div class="subtitle">July 5, 2026 — 3:00 PM</div>
+    <div class="timer-text" id="timer">Loading…</div>
+  </div>
+</div>
 
-                const angle = (Math.PI * 2) * (i / n);
-                const radius = 60 + Math.random() * 60;
-                const dx = Math.cos(angle) * radius;
-                const dy = Math.sin(angle) * radius;
+<script>
+  const TARGET_UTC_MS = {target_utc_ms};
 
-                p.style.setProperty("--dx", dx + "px");
-                p.style.setProperty("--dy", dy + "px");
+  // ----- Create flowers -----
+  const flowersLayer = document.getElementById("flowers");
+  const emojis = ["🌸","🌷","🌺","💐","🌸","🌷"];
+  const colors = ["#ff4fa3", "#ff77c8", "#ff9ad9", "#ffb6e6", "#ff2d8f"];
 
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 600);
-            }
-        }
+  function addFlower(leftPct, delayS, emoji) {{
+    const el = document.createElement("div");
+    el.className = "flower";
+    el.textContent = emoji;
+    el.style.left = leftPct + "%";
+    el.style.animationDelay = delayS + "s";
+    el.style.top = "-20vh"; // start above; animation moves it
+    flowersLayer.appendChild(el);
 
-        document.addEventListener("click", (e) => {
-            const el = e.target;
-            if (!el || !el.classList || !el.classList.contains("flower")) return;
+    // click handler
+    el.addEventListener("click", (e) => {{
+      e.stopPropagation();
+      const rect = el.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      spawnBurst(x, y);
 
-            const rect = el.getBoundingClientRect();
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
+      el.style.transition = "transform 160ms ease, opacity 160ms ease";
+      el.style.transform = "scale(0.1)";
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 170);
+    }});
+  }}
 
-            spawnBurst(x, y);
+  // Match your original positions/delays
+  addFlower(10, 0,  "🌸");
+  addFlower(25, 4,  "🌷");
+  addFlower(40, 8,  "🌺");
+  addFlower(55, 2,  "💐");
+  addFlower(70, 6,  "🌸");
+  addFlower(85, 10, "🌷");
 
-            el.style.transition = "transform 160ms ease, opacity 160ms ease";
-            el.style.transform = "scale(0.1)";
-            el.style.opacity = "0";
-            setTimeout(() => el.remove(), 170);
-        }, true);
-    })();
-    </script>
-    """,
-    unsafe_allow_html=True
-)
+  // ----- Burst -----
+  function spawnBurst(x, y) {{
+    const n = 18;
+    for (let i = 0; i < n; i++) {{
+      const p = document.createElement("div");
+      p.className = "burst";
+      p.style.left = (x - 5) + "px";
+      p.style.top  = (y - 5) + "px";
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-# ---------- Title ----------
-st.markdown(
-    """
-    <div class="timer-box">
-        <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
-        <div class="subtitle">July 5, 2026 — 3:00 PM</div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+      const angle = (Math.PI * 2) * (i / n);
+      const radius = 60 + Math.random() * 60;
+      const dx = Math.cos(angle) * radius;
+      const dy = Math.sin(angle) * radius;
 
-placeholder = st.empty()
+      p.style.setProperty("--dx", dx + "px");
+      p.style.setProperty("--dy", dy + "px");
 
-# --- Slider removed ---
-fps = 30
-sleep_s = 1 / fps
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 600);
+    }}
+  }}
 
-# ---------- Loop ----------
-while True:
-    now = datetime.now(timezone.utc)
-    delta = TARGET.astimezone(timezone.utc) - now
-    total_seconds = delta.total_seconds()
+  // ----- Countdown (smooth) -----
+  const timerEl = document.getElementById("timer");
 
-    if total_seconds <= 0:
-        placeholder.markdown(
-            """
-            <div class="timer-box">
-                <div class="timer-text">🌸 IT’S TIME 🌸</div>
-                <div class="subtitle">I’m finally with you 💗</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        st.balloons()
-        break
+  function pad2(n) {{ return String(n).padStart(2, "0"); }}
+  function pad3(n) {{ return String(n).padStart(3, "0"); }}
 
-    days = int(total_seconds // 86400)
-    rem = total_seconds - days * 86400
-    hours = int(rem // 3600)
-    rem -= hours * 3600
-    minutes = int(rem // 60)
-    rem -= minutes * 60
-    seconds = int(rem)
-    ms = int((rem - seconds) * 1000)
+  function tick() {{
+    const now = Date.now();
+    let diff = TARGET_UTC_MS - now;
 
-    text = f"{days:02d}d  {hours:02d}h  {minutes:02d}m  {seconds:02d}s  {ms:03d}ms"
+    if (diff <= 0) {{
+      timerEl.textContent = "🌸 IT’S TIME 🌸";
+      return;
+    }}
 
-    placeholder.markdown(
-        f"""
-        <div class="timer-box">
-            <div class="timer-text">{text}</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    const days = Math.floor(diff / 86400000);
+    diff -= days * 86400000;
 
-    time.sleep(sleep_s)
+    const hours = Math.floor(diff / 3600000);
+    diff -= hours * 3600000;
+
+    const minutes = Math.floor(diff / 60000);
+    diff -= minutes * 60000;
+
+    const seconds = Math.floor(diff / 1000);
+    diff -= seconds * 1000;
+
+    const ms = diff;
+
+    timerEl.textContent = `${{pad2(days)}}d  ${{pad2(hours)}}h  ${{pad2(minutes)}}m  ${{pad2(seconds)}}s  ${{pad3(ms)}}ms`;
+
+    requestAnimationFrame(tick);
+  }}
+
+  requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>
+"""
+
+# Render the full-page experience in a component
+components.html(html, height=700, scrolling=False)
