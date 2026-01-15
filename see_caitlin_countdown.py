@@ -100,7 +100,8 @@ st.markdown(
 
 placeholder = st.empty()
 
-fps = st.slider("Smoothness", 10, 60, 30)
+# --- Slider removed ---
+fps = 30
 sleep_s = 1 / fps
 
 # ---------- Loop ----------
