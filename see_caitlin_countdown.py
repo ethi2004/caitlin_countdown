@@ -91,8 +91,8 @@ st.markdown(
 st.markdown(
     """
     <div class="timer-box">
-        <div class="subtitle">💗 Countdown until I see you 💗</div>
-        <div class="subtitle">July 5, 2026 — 3:00 PM (Dallas)</div>
+        <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
+        <div class="subtitle">July 5, 2026 — 3:00 PM</div>
     </div>
     """,
     unsafe_allow_html=True
