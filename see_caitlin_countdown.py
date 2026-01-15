@@ -179,7 +179,6 @@ st.markdown(
     display: block;
 }
 
-/* ONLY CHANGE IS HERE */
 .left-polaroid {
     left: 6%;
     top: 38%;
@@ -190,6 +189,13 @@ st.markdown(
     right: 6%;
     top: 38%;
     transform: rotate(7deg);
+}
+
+/* ---------- HIDE PHOTOS ON PHONES ---------- */
+@media (max-width: 600px) {
+    .side-polaroid {
+        display: none;
+    }
 }
 </style>
     """,
