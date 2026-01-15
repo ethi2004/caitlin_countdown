@@ -163,7 +163,6 @@ st.markdown(
     color: #b03060;
 }
 
-/* ONLY CHANGE IS HERE */
 .side-polaroid {
     background: #fffaf6;
     padding: 10px 10px 28px 10px;
@@ -180,15 +179,16 @@ st.markdown(
     display: block;
 }
 
+/* ONLY CHANGE IS HERE */
 .left-polaroid {
     left: 6%;
-    top: 45%;
+    top: 38%;
     transform: rotate(-8deg);
 }
 
 .right-polaroid {
     right: 6%;
-    top: 45%;
+    top: 38%;
     transform: rotate(7deg);
 }
 </style>
