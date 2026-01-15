@@ -37,7 +37,7 @@ st.markdown(
 )
 
 # --------------------------------------------------
-# Password Gate
+# Password Gate (same lock screen)
 # --------------------------------------------------
 if "unlocked" not in st.session_state:
     st.session_state.unlocked = False
@@ -69,10 +69,12 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS ONLY (separate call)
+# CSS ONLY (keep separate so HTML never shows as text)
 # --------------------------------------------------
-css = """
+st.markdown(
+    """
 <style>
+/* Floating emojis layer */
 .flowers {
     position: fixed;
     inset: 0;
@@ -82,7 +84,6 @@ css = """
 
 .flower {
     position: absolute;
-    top: 0;
     font-size: 32px;
     opacity: 0.6;
     animation-name: float;
@@ -90,6 +91,7 @@ css = """
     animation-iteration-count: infinite;
 }
 
+/* Always spawn from bottom and float up */
 @keyframes float {
     0%   { transform: translateY(110vh) rotate(0deg); }
     100% { transform: translateY(-10vh) rotate(360deg); }
@@ -103,7 +105,6 @@ css = """
     padding: 30px 20px;
     box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .timer-text {
@@ -119,42 +120,51 @@ css = """
     margin-bottom: 10px;
 }
 </style>
-""".strip()
-
-st.markdown(css, unsafe_allow_html=True)
+    """.strip(),
+    unsafe_allow_html=True
+)
 
 # --------------------------------------------------
-# FLOWERS HTML ONLY (separate call, no indentation)
+# FLOWERS HTML ONLY (bottom spawn + continuous + random-feel)
 # --------------------------------------------------
-flowers_html = """
+st.markdown(
+    """
 <div class="flowers">
-  <div class="flower" style="left:6%;  top:12%; animation-delay:1s;  animation-duration:17s;">🌸</div>
-  <div class="flower" style="left:9%;  top:68%; animation-delay:8s;  animation-duration:23s;">🎀</div>
-  <div class="flower" style="left:4%;  top:85%; animation-delay:14s; animation-duration:19s;">🌷</div>
+  <!-- More emojis = more continuous flow.
+       Random-feel comes from mixed delays + mixed durations (speeds). -->
 
-  <div class="flower" style="left:18%; top:24%; animation-delay:3s;  animation-duration:21s;">🧸</div>
-  <div class="flower" style="left:23%; top:72%; animation-delay:10s; animation-duration:16s;">🌺</div>
-  <div class="flower" style="left:15%; top:92%; animation-delay:16s; animation-duration:25s;">💐</div>
+  <div class="flower" style="left:4%;  animation-delay:0s;  animation-duration:17s;">🌸</div>
+  <div class="flower" style="left:9%;  animation-delay:2s;  animation-duration:22s;">🎀</div>
+  <div class="flower" style="left:14%; animation-delay:4s;  animation-duration:19s;">🌷</div>
+  <div class="flower" style="left:19%; animation-delay:6s;  animation-duration:24s;">🧸</div>
+  <div class="flower" style="left:24%; animation-delay:1s;  animation-duration:18s;">🌺</div>
+  <div class="flower" style="left:29%; animation-delay:8s;  animation-duration:21s;">💐</div>
 
-  <div class="flower" style="left:33%; top:6%;  animation-delay:6s;  animation-duration:20s;">🎀</div>
-  <div class="flower" style="left:37%; top:55%; animation-delay:12s; animation-duration:24s;">🌸</div>
-  <div class="flower" style="left:30%; top:88%; animation-delay:2s;  animation-duration:18s;">🌷</div>
+  <div class="flower" style="left:34%; animation-delay:3s;  animation-duration:20s;">🎀</div>
+  <div class="flower" style="left:39%; animation-delay:10s; animation-duration:25s;">🌸</div>
+  <div class="flower" style="left:44%; animation-delay:5s;  animation-duration:18s;">🌷</div>
+  <div class="flower" style="left:49%; animation-delay:12s; animation-duration:23s;">🧸</div>
+  <div class="flower" style="left:54%; animation-delay:7s;  animation-duration:19s;">🌺</div>
+  <div class="flower" style="left:59%; animation-delay:14s; animation-duration:26s;">💐</div>
 
-  <div class="flower" style="left:48%; top:18%; animation-delay:9s;  animation-duration:22s;">🌺</div>
-  <div class="flower" style="left:52%; top:64%; animation-delay:4s;  animation-duration:17s;">🧸</div>
-  <div class="flower" style="left:45%; top:94%; animation-delay:15s; animation-duration:26s;">💐</div>
+  <div class="flower" style="left:64%; animation-delay:9s;  animation-duration:17s;">🌸</div>
+  <div class="flower" style="left:69%; animation-delay:16s; animation-duration:24s;">🎀</div>
+  <div class="flower" style="left:74%; animation-delay:11s; animation-duration:20s;">🌷</div>
+  <div class="flower" style="left:79%; animation-delay:18s; animation-duration:27s;">🧸</div>
+  <div class="flower" style="left:84%; animation-delay:13s; animation-duration:19s;">🌺</div>
+  <div class="flower" style="left:89%; animation-delay:20s; animation-duration:22s;">💐</div>
 
-  <div class="flower" style="left:63%; top:14%; animation-delay:11s; animation-duration:19s;">🌸</div>
-  <div class="flower" style="left:67%; top:59%; animation-delay:5s;  animation-duration:23s;">🎀</div>
-  <div class="flower" style="left:60%; top:90%; animation-delay:17s; animation-duration:18s;">🌷</div>
-
-  <div class="flower" style="left:78%; top:26%; animation-delay:2s;  animation-duration:24s;">🧸</div>
-  <div class="flower" style="left:83%; top:70%; animation-delay:9s;  animation-duration:16s;">🌺</div>
-  <div class="flower" style="left:75%; top:96%; animation-delay:13s; animation-duration:21s;">💐</div>
+  <!-- Extra wave so it feels nonstop (still bottom-spawn) -->
+  <div class="flower" style="left:7%;  animation-delay:15s; animation-duration:21s;">🎀</div>
+  <div class="flower" style="left:22%; animation-delay:17s; animation-duration:18s;">🌸</div>
+  <div class="flower" style="left:37%; animation-delay:19s; animation-duration:23s;">🌷</div>
+  <div class="flower" style="left:52%; animation-delay:21s; animation-duration:20s;">🧸</div>
+  <div class="flower" style="left:67%; animation-delay:23s; animation-duration:26s;">🌺</div>
+  <div class="flower" style="left:82%; animation-delay:25s; animation-duration:19s;">💐</div>
 </div>
-""".strip()
-
-st.markdown(flowers_html, unsafe_allow_html=True)
+    """.strip(),
+    unsafe_allow_html=True
+)
 
 # --------------------------------------------------
 # Title
