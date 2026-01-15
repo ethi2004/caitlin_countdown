@@ -9,6 +9,7 @@ Original file is located at
 
 # app.py
 import time
+import textwrap
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 import streamlit as st
@@ -22,6 +23,21 @@ TZ_CENTRAL = ZoneInfo("America/Chicago")
 TARGET = datetime(2026, 7, 5, 15, 0, 0, tzinfo=TZ_CENTRAL)
 
 # --------------------------------------------------
+# Global background (so login screen matches too)
+# --------------------------------------------------
+st.markdown(
+    textwrap.dedent("""
+    <style>
+    .stApp {
+        background: linear-gradient(135deg, #ffd6e8, #ffeef6);
+        overflow: hidden;
+    }
+    </style>
+    """),
+    unsafe_allow_html=True
+)
+
+# --------------------------------------------------
 # Password Gate
 # --------------------------------------------------
 if "unlocked" not in st.session_state:
@@ -29,7 +45,7 @@ if "unlocked" not in st.session_state:
 
 if not st.session_state.unlocked:
     st.markdown(
-        """
+        textwrap.dedent("""
         <div style="text-align:center; margin-top:80px;">
             <div style="font-size:40px; font-weight:800; color:#b03060;">
                 Only for Caitlin Fowler 💗
@@ -38,11 +54,12 @@ if not st.session_state.unlocked:
                 Enter the password to view the countdown
             </div>
         </div>
-        """,
+        """),
         unsafe_allow_html=True
     )
 
     pw = st.text_input("Password", type="password", placeholder="Type it here…")
+
     if st.button("Unlock 💗"):
         if pw == "ILY":
             st.session_state.unlocked = True
@@ -53,63 +70,57 @@ if not st.session_state.unlocked:
     st.stop()
 
 # --------------------------------------------------
-# CSS + Floating Emojis (NO INDENTATION ON HTML)
+# CSS + Continuous Floating Emojis (NO GAPS)
 # --------------------------------------------------
 st.markdown(
-    """
-<style>
-/* Background */
-.stApp {
-    background: linear-gradient(135deg, #ffd6e8, #ffeef6);
-    overflow: hidden;
-}
+    textwrap.dedent("""
+    <style>
+    /* Floating emojis layer */
+    .flowers {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
 
-/* Floating emojis */
-.flowers {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-}
+    .flower {
+        position: absolute;
+        font-size: 32px;
+        animation: float 18s linear infinite;
+        opacity: 0.6;
+    }
 
-.flower {
-    position: absolute;
-    font-size: 32px;
-    animation: float 18s linear infinite;
-    opacity: 0.6;
-}
+    @keyframes float {
+        0%   { transform: translateY(110vh) rotate(0deg); }
+        100% { transform: translateY(-10vh) rotate(360deg); }
+    }
 
-@keyframes float {
-    0%   { transform: translateY(110vh) rotate(0deg); }
-    100% { transform: translateY(-10vh) rotate(360deg); }
-}
+    /* Timer box */
+    .timer-box {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 30px 20px;
+        box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-/* Timer box */
-.timer-box {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(10px);
-    border-radius: 24px;
-    padding: 30px 20px;
-    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.25);
-    text-align: center;
-    margin-bottom: 20px;
-}
+    .timer-text {
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #b03060;
+    }
 
-.timer-text {
-    font-size: 52px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: #b03060;
-}
+    .subtitle {
+        font-size: 20px;
+        color: #a8326d;
+        margin-bottom: 10px;
+    }
+    </style>
 
-.subtitle {
-    font-size: 20px;
-    color: #a8326d;
-    margin-bottom: 10px;
-}
-</style>
-
-<div class="flowers">
+    <div class="flowers">
     <!-- Column 1 -->
     <div class="flower" style="left:5%;  animation-delay:0s;">🌸</div>
     <div class="flower" style="left:5%;  animation-delay:6s;">🎀</div>
@@ -139,8 +150,8 @@ st.markdown(
     <div class="flower" style="left:80%; animation-delay:0s;">🧸</div>
     <div class="flower" style="left:80%; animation-delay:6s;">🌺</div>
     <div class="flower" style="left:80%; animation-delay:12s;">💐</div>
-</div>
-    """,
+    </div>
+    """),
     unsafe_allow_html=True
 )
 
@@ -148,12 +159,12 @@ st.markdown(
 # Title
 # --------------------------------------------------
 st.markdown(
-    """
+    textwrap.dedent("""
     <div class="timer-box">
         <div class="subtitle">💗 Countdown to a HUGGY WUGGY 💗</div>
         <div class="subtitle">July 5, 2026 — 3:00 PM</div>
     </div>
-    """,
+    """),
     unsafe_allow_html=True
 )
 
@@ -172,12 +183,12 @@ while True:
 
     if total_seconds <= 0:
         placeholder.markdown(
-            """
+            textwrap.dedent("""
             <div class="timer-box">
                 <div class="timer-text">🌸 IT’S TIME 🌸</div>
                 <div class="subtitle">I’m finally with you 💗</div>
             </div>
-            """,
+            """),
             unsafe_allow_html=True
         )
         st.balloons()
@@ -195,11 +206,11 @@ while True:
     text = f"{days:02d}d  {hours:02d}h  {minutes:02d}m  {seconds:02d}s  {ms:03d}ms"
 
     placeholder.markdown(
-        f"""
+        textwrap.dedent(f"""
         <div class="timer-box">
             <div class="timer-text">{text}</div>
         </div>
-        """,
+        """),
         unsafe_allow_html=True
     )
 
